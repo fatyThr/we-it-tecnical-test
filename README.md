@@ -14,7 +14,9 @@ This repository contains the result of technical test, a microservice built for 
 ## Description
 
 The project  is a microservice designed  to create, read and modify resources
-
+For access to the project use :
+Login : user
+Password :password
 ## Getting Started
 
 ### Prerequisites
