@@ -10,6 +10,7 @@ import com.technical.test.weitproject.domain.model.TimeSlot;
 import com.technical.test.weitproject.domain.service.DeliveryService;
 import com.technical.test.weitproject.domain.service.mapper.DeliverySlotMapper;
 import com.technical.test.weitproject.domain.service.mapper.TimeSlotMapper;
+import com.technical.test.weitproject.infrastructure.config.DeliveryMode;
 import com.technical.test.weitproject.infrastructure.exceptions.TechnicalException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,12 +43,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     public DeliverySlotResponse saveDeliverySlot(DeliverySlotRequest deliverySlotRequest) {
-        TimeSlot timeSlot=timeSlotRepository.findById(deliverySlotRequest.getTimeSlotId()).orElseThrow(() -> new TechnicalException("error.time.slot.not.found", deliverySlotRequest.getTimeSlotId()));
-        if(!timeSlot.isAvailable()){
-            throw new TechnicalException("error.time.slot.not.available", deliverySlotRequest.getTimeSlotId());
-         }
-        timeSlot.setAvailable(false);
-        timeSlotRepository.save(timeSlot);
+        TimeSlot timeSlot = getTimeSlot(deliverySlotRequest);
         DeliverySlot deliverySlot = DeliverySlot.builder()
                 .clientName(deliverySlotRequest.getClientName())
                 .deliveryMode(deliverySlotRequest.getDeliveryMode())
@@ -59,16 +55,22 @@ public class DeliveryServiceImpl implements DeliveryService {
         return deliverySlotMapper.deliverySlotToDeliverySlotResponse(deliverySlotRepository.save(deliverySlot));
     }
 
+    private TimeSlot getTimeSlot(DeliverySlotRequest deliverySlotRequest) {
+        return timeSlotRepository.findById(deliverySlotRequest.getTimeSlotId()).orElseThrow(() -> new TechnicalException("error.time.slot.not.found", deliverySlotRequest.getTimeSlotId()));
+
+    }
+
     @Override
-    public void chooseDeliveryMode(Long deliveryId, DeliverySlotRequest deliverySlotRequest) {
-        log.info("Service to update delivery slot {} payload : {}", deliveryId, deliverySlotRequest);
+    public void chooseDeliveryMode(Long deliveryId, DeliveryMode deliveryMode) {
+        log.info("Service to update delivery slot {} payload : {}", deliveryId, deliveryMode);
         DeliverySlot deliverySlot = deliverySlotRepository.findById(deliveryId).orElseThrow(() -> new TechnicalException("error.delivery.slot.not.found", deliveryId));
-        deliverySlot.setDeliveryMode(deliverySlotRequest.getDeliveryMode());
+        deliverySlot.setDeliveryMode(deliveryMode);
         deliverySlotRepository.save(deliverySlot);
     }
 
     @Override
-    public List<TimeSlotResponse> getAllAvailableTimesSlots() {
-        return timeSlotRepository.findAllByAvailable(true).stream().map(timeSlotMapper::timeSlotToTimeSlotResponse).toList();
+    public List<TimeSlotResponse> getAllTimesSlots() {
+        log.info("Service to get all available time slot ");
+        return timeSlotRepository.findAll().stream().map(timeSlotMapper::timeSlotToTimeSlotResponse).toList();
     }
 }

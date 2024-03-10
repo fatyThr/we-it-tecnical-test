@@ -1,24 +1,22 @@
 package com.technical.test.weitproject.application.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.hateoas.RepresentationModel;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
- public class TimeSlotResponse extends RepresentationModel<DeliverySlotResponse> {
-
+@Getter
+@Setter
+public class TimeSlotResponse extends RepresentationModel<DeliverySlotResponse> {
 
     private Long id;
-    private LocalTime startDate;
-    private LocalTime endDate;
-    private boolean available;
-
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate startDay;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    private LocalTime startTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    private LocalTime endTime;
 }

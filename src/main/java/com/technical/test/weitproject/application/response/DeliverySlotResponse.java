@@ -25,8 +25,7 @@ public class DeliverySlotResponse extends RepresentationModel<DeliverySlotRespon
     @Enumerated(EnumType.STRING)
     private DeliveryMode deliveryMode;
 
-    private LocalTime startDate;
-    private LocalTime endDate;
+    private TimeSlotResponse timeSlot;
 
     private boolean available;
 }

@@ -5,6 +5,7 @@ import com.technical.test.weitproject.application.response.DeliverySlotResponse;
 import com.technical.test.weitproject.application.response.DeliverySlotResponses;
 import com.technical.test.weitproject.application.response.TimeSlotResponses;
 import com.technical.test.weitproject.domain.service.DeliveryService;
+import com.technical.test.weitproject.infrastructure.config.DeliveryMode;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,10 +33,10 @@ public class DeliveryController {
         return new ResponseEntity<>(deliverySlotResponse, HttpStatus.OK);
      }
 
-    @GetMapping("/available-times-slot")
-    public ResponseEntity<TimeSlotResponses>  getAllAvalaibleTimesSlots() {
+    @GetMapping("/times-slot")
+    public ResponseEntity<TimeSlotResponses>  getAllTimesSlots() {
         TimeSlotResponses timeSlotResponses=new TimeSlotResponses();
-        timeSlotResponses.setTimeSlotAvalaibleResponses(deliveryService.getAllAvailableTimesSlots());
+        timeSlotResponses.setTimeSlotAvalaibleResponses(deliveryService.getAllTimesSlots());
         Link selfLink = linkTo(methodOn(DeliveryController.class).getAllDeliverySlots()).withSelfRel();
         timeSlotResponses.add(selfLink);
         return ResponseEntity.ok(timeSlotResponses);
@@ -44,17 +45,21 @@ public class DeliveryController {
     public ResponseEntity<DeliverySlotResponses>  getAllDeliverySlots() {
         DeliverySlotResponses deliverySlotResponses=new DeliverySlotResponses();
         deliverySlotResponses.setDeliverySlotResponses(deliveryService.getAllDeliverySlots());
-        Link selfLink = linkTo(methodOn(DeliveryController.class).getAllAvalaibleTimesSlots()).withSelfRel();
+        Link selfLink = linkTo(methodOn(DeliveryController.class).getAllTimesSlots()).withSelfRel();
         deliverySlotResponses.add(selfLink);
         return ResponseEntity.ok(deliverySlotResponses);
     }
     @PatchMapping("/choose-mode")
-    public void chooseDeliveryMode(@RequestParam Long deliveryId, @RequestParam DeliverySlotRequest deliverySlotRequest) {
-        deliveryService.chooseDeliveryMode(deliveryId, deliverySlotRequest);
-     }
+    public ResponseEntity<Void> chooseDeliveryMode(@RequestParam Long deliveryId, @RequestParam String deliveryMode) {
+        deliveryService.chooseDeliveryMode(deliveryId, DeliveryMode.valueOf(deliveryMode));
+        return ResponseEntity.noContent().build();
+
+    }
     @PostMapping("/slots")
-    public void saveDeliverySlot(@RequestBody DeliverySlotRequest deliverySlotRequest) {
-        deliveryService.saveDeliverySlot(deliverySlotRequest);
+    public ResponseEntity<DeliverySlotResponse> saveDeliverySlot(@RequestBody DeliverySlotRequest deliverySlotRequest) {
+        DeliverySlotResponse deliverySlotResponse=deliveryService.saveDeliverySlot(deliverySlotRequest);
+        return new ResponseEntity<>(deliverySlotResponse, HttpStatus.CREATED);
+
     }
     private void addLinkToDeliverySlot(DeliverySlotResponse deliverySlot) {
         Link link = linkTo(DeliveryController.class).slash(deliverySlot.getId()).withSelfRel();
