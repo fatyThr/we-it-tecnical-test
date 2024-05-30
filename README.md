@@ -1,6 +1,6 @@
-# we-it-tecnical-test
+# epragne-unite-compte-administration
 
-This repository contains the result of technical test, a microservice built for the REST API using hexagonal architecture, Spring Boot, and Java 21.
+This repository contains the project of epragne-unite-compte-administration, a microservice built for the REST API using microservice architecture, Spring Boot, and Java 21.
 
 ## Table of Contents
 
@@ -21,7 +21,7 @@ Password :password
 
 ### Prerequisites
 
-To run the we-it-tecnical-test Project, make sure you have the following installed on your system:
+To run the epragne-unite-compte-administration Project, make sure you have the following installed on your system:
 - Java Development Kit (JDK) 21
 - Spring Boot 3.2.3
 - Maven
@@ -29,25 +29,19 @@ To run the we-it-tecnical-test Project, make sure you have the following install
 
 #### Database Setup
 
--Create the H2 database:
-Add dependency; 
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-        </dependency>
+-Create the SQL SERVER database: 
 ### Installation
 
 1.	Clone the repository:
-      git clone https://github.com/fatyThr/we-it-tecnical-test.git
+      git clone // add repo
 2.  Build the project using Maven:
-> cd we-it-tecnical-test
+> cd epragne-unite-compte-administration
 > mvn clean install
 
 ### Configuration
 
-To start the we-it-tecnical-test, use the following command:
-> java -jar we-it-tecnical-test.jar
+To start the epargne-unite-compte-administration, use the following command:
+> java -jar epargne-unite-compte-administration.jar
 >
 ## API Documentation
 
